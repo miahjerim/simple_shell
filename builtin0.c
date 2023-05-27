@@ -1,21 +1,23 @@
 #include "shell.h"
 /**
  * _myexit - exits the shell
- * @info: Structure containing arguments
+	* 
+ * @info: Structure containing potential arguments. Used to maintain
+	* 
  * constant function prototype.
+	* 
  * Return: exits with a given exit status
+	* 
  * (0) if info.argv[0] != "exit"
+	* 
  */
 int _myexit(info_t *info)
 {
 	int exitcheck;
 
-/* If there is an exit argument */
-	if (info->argv[1])
+	if (info->argv[1]) /* If there is an exit arguement */
 	{
-		/* Convert argument to integer */
 		exitcheck = _erratoi(info->argv[1]);
-		/* Argument is not a valid number */
 		if (exitcheck == -1)
 		{
 			info->status = 2;
@@ -24,34 +26,33 @@ int _myexit(info_t *info)
 			_eputchar('\n');
 			return (1);
 		}
-		/* Store exit status */
 		info->err_num = _erratoi(info->argv[1]);
 		return (-2);
 	}
-	/* No exit argument provided */
 	info->err_num = -1;
 	return (-2);
 }
 /**
  * _mycd - changes the current directory of the process
+	* 
  * @info: Structure containing potential arguments. Used to maintain
+	* 
  * constant function prototype.
+	* 
  * Return: Always 0
  */
 int _mycd(info_t *info)
+
 {
 	char *s, *dir, buffer[1024];
 	int chdir_ret;
 
-/* Get current working directory */
 	s = getcwd(buffer, 1024);
 	if (!s)
-	/* Placeholder error message */
 		_puts("TODO: >>getcwd failure emsg here<<\n");
 
-	if (!info->argv[1])/* No argument provided to cd command */
+	if (!info->argv[1])
 	{
-		/* Get value of HOME environment variable */
 		dir = _getenv(info, "HOME=");
 		if (!dir)
 			chdir_ret = /* TODO: what should this be? */
@@ -60,6 +61,7 @@ int _mycd(info_t *info)
 			chdir_ret = chdir(dir);
 	}
 	else if (_strcmp(info->argv[1], "-") == 0)
+
 	{
 		if (!_getenv(info, "OLDPWD="))
 		{
@@ -71,7 +73,7 @@ int _mycd(info_t *info)
 		chdir_ret = /* TODO: what should this be? */
 			chdir((dir = _getenv(info, "OLDPWD=")) ? dir : "/");
 	}
-	
+
 	else
 		chdir_ret = chdir(info->argv[1]);
 	if (chdir_ret == -1)
@@ -79,6 +81,7 @@ int _mycd(info_t *info)
 		print_error(info, "can't cd to ");
 		_eputs(info->argv[1]), _eputchar('\n');
 	}
+
 	else
 	{
 		_setenv(info, "OLDPWD", _getenv(info, "PWD="));
@@ -86,11 +89,13 @@ int _mycd(info_t *info)
 	}
 	return (0);
 }
-
 /**
  * _myhelp - changes the current directory of the process
+	* 
  * @info: Structure containing potential arguments. Used to maintain
+	* 
  * constant function prototype.
+	* 
  * Return: Always 0
  */
 int _myhelp(info_t *info)
@@ -99,6 +104,7 @@ int _myhelp(info_t *info)
 
 	arg_array = info->argv;
 	_puts("help call works. Function not yet implemented \n");
+	
 	if (0)
 		_puts(*arg_array); /* temp att_unused workaround */
 	return (0);
